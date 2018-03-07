@@ -23,8 +23,8 @@ namespace CardManager.Service
                 }
                 else
                 {
-                    Dictionary<int, Card> cards = (Dictionary<int, Card>)ctx.Cache[CacheKey];
-                    if (!cards.ContainsKey(id) || cards[id] == null || (DateTime.Now - cards[id].LastUseDateTime).TotalMinutes >= DeckExpirationTime)
+                    Card[] cards = (Card[])ctx.Cache[CacheKey];
+                    if (cards[id] == null || (DateTime.Now - cards[id].LastUseDateTime).TotalMinutes >= DeckExpirationTime)
                     {
                         res = null;
                     }
@@ -71,15 +71,13 @@ namespace CardManager.Service
                 card.LastUseDateTime = DateTime.Now;
                 if (ctx.Cache[CacheKey] == null)
                 {
-                    Dictionary<int, Card> cards = new Dictionary<int, Card>
-                    {
-                        [id] = card
-                    };
+                    Card[] cards = new Card[MaxNumberOfDeck];
+                    cards[id] = card;
                     ctx.Cache[CacheKey] = cards;
                 }
                 else
                 {
-                    Dictionary<int, Card> cards = (Dictionary<int, Card>)ctx.Cache[CacheKey];
+                    Card[] cards = (Card[])ctx.Cache[CacheKey];
                     cards[id] = card;
                 }
             }
