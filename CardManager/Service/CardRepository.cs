@@ -3,83 +3,85 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using CardManager.Models;
+using System.Configuration;
+using StackExchange.Redis;
+using Newtonsoft.Json;
+using System.Text;
 
 namespace CardManager.Service
 {
     public class CardRepository
     {
-        private const int DeckExpirationTime = 30;
-        private const int MaxNumberOfDeck = 100;
-        private const string CacheKey = "CardStore";
-        public static Card GetCard(int id)//get card from cache by id
+        private static readonly int ExpirationTime = Convert.ToInt32(ConfigurationManager.AppSettings["ExpirationTime"]);
+
+        // Redis Connection string info
+        private static Lazy<ConnectionMultiplexer> lazyConnection = new Lazy<ConnectionMultiplexer>(() =>
+        {
+            string cacheConnection = ConfigurationManager.AppSettings["CacheConnection"].ToString();
+            return ConnectionMultiplexer.Connect(cacheConnection);
+        });
+
+        public static ConnectionMultiplexer Connection
+        {
+            get
+            {
+                return lazyConnection.Value;
+            }
+        }
+        public static Card GetCard(string id)//get card from cache by id
         {
             Card res = null;
-            var ctx = HttpContext.Current;
-            if (ctx != null)
+            if (Connection.IsConnected)
             {
-                if (ctx.Cache[CacheKey] == null)
+                IDatabase cache = Connection.GetDatabase();
+                if (cache.KeyExists(id.ToString()))
                 {
-                    res = null;
+                    var data = cache.StringGet(id.ToString());
+                    res = JsonConvert.DeserializeObject<Card>(data);
                 }
-                else
-                {
-                    Card[] cards = (Card[])ctx.Cache[CacheKey];
-                    if (cards[id] == null || (DateTime.Now - cards[id].LastUseDateTime).TotalMinutes >= DeckExpirationTime)
-                    {
-                        res = null;
-                    }
-                    else
-                    {
-                        res = cards[id];
-                    }
-                }
+            }
+            else
+            {
+                Console.WriteLine($"Redis not connected, connectionstring is {ConfigurationManager.AppSettings["CacheConnection"]}");
             }
             return res;
         }
         public static Card GetCardAndUpdateLastUse()//generate new card and id
         {
             Card card = null;
-            int target = 0;
-            for (target = 0; target < MaxNumberOfDeck; target++)
+            string id = Guid.NewGuid().ToString();
+
+            while (GetCard(id) != null)
             {
-                if (GetCard(target) == null)
-                {
-                    break;
-                }
+                id = Guid.NewGuid().ToString();
             }
-            if (target != MaxNumberOfDeck)
-            {
-                card = new Card(target);
-                SaveCardAndUpdateLastUse(target, card);
-            }
+            card = new Card(id);
+            SaveCardAndUpdateLastUse(id, card);
+
             return card;
         }
-        public static Card GetCardAndUpdateLastUse(int id)//get card from cache by id and update last use
+        public static Card GetCardAndUpdateLastUse(string id)//get card from cache by id and update last use
         {
             Card res = GetCard(id);
             if (res != null)
             {
                 SaveCardAndUpdateLastUse(id, res);
             }
+
             return res;
         }
-        public static void SaveCardAndUpdateLastUse(int id, Card card)//save card to cache with id and update access time
+        public static void SaveCardAndUpdateLastUse(string id, Card card)//save card to cache with id and update access time
         {
-            var ctx = HttpContext.Current;
-            if (ctx != null)
+            if (Connection.IsConnected)
             {
-                card.LastUseDateTime = DateTime.Now;
-                if (ctx.Cache[CacheKey] == null)
-                {
-                    Card[] cards = new Card[MaxNumberOfDeck];
-                    cards[id] = card;
-                    ctx.Cache[CacheKey] = cards;
-                }
-                else
-                {
-                    Card[] cards = (Card[])ctx.Cache[CacheKey];
-                    cards[id] = card;
-                }
+                IDatabase cache = Connection.GetDatabase();
+                string data = JsonConvert.SerializeObject(card);
+
+                cache.StringSet(id, data, TimeSpan.FromMinutes(ExpirationTime));
+            }
+            else
+            {
+                Console.WriteLine($"Redis not connected, connectionstring is {ConfigurationManager.AppSettings["CacheConnection"]}");
             }
         }
     }

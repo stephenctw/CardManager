@@ -7,7 +7,7 @@ namespace CardManager.Models
 {
     public class Card
     {
-        private const int NumberOfCardsInDeck = 52;
+        public const int NumberOfCardsInDeck = 52;
         private static readonly int[] InitialDeck = new int [NumberOfCardsInDeck] {0,1,2,3,4,5,6,7,8,9,10,
                                                     11,12,13,14,15,16,17,18,19,20,
                                                     21,22,23,24,25,26,27,28,29,30,
@@ -15,39 +15,43 @@ namespace CardManager.Models
                                                     41,42,43,44,45,46,47,48,49,50,
                                                     51};
         private static Random rand = new Random();
-        public int UserId;
-        public int Idx;
-        public DateTime LastUseDateTime;
-        public int[] Deck;
-        public Card(int id)
+        public string userId;
+        public int idx;
+        public int[] deck;
+        public Card(string id)
         {
-            UserId = id;
-            Idx = 0;
-            Deck = new int [NumberOfCardsInDeck];
-            Array.Copy(InitialDeck, Deck, NumberOfCardsInDeck);
+            userId = id;
+            idx = 0;
+            deck = new int [NumberOfCardsInDeck];
+            Array.Copy(InitialDeck, deck, NumberOfCardsInDeck);
         }
         public void Shuffle()
         {
-            Idx = 0;
+            idx = 0;
             for (int i = 0; i < NumberOfCardsInDeck; i++)
             {
-                int target = rand.Next() % 52;
-                int temp = Deck[i];
-                Deck[i] = Deck[target];
-                Deck[target] = temp;
+                int target = rand.Next(NumberOfCardsInDeck);
+                int temp = deck[i];
+                deck[i] = deck[target];
+                deck[target] = temp;
             }
         }
 
         public void Cut()
         {
-            Idx = 0;
-            int offset = rand.Next() % 52;
+            int offset = rand.Next(NumberOfCardsInDeck);
 
-            int [] cut_Deck = new int[NumberOfCardsInDeck];
-            Array.Copy(Deck, offset, cut_Deck, 0, NumberOfCardsInDeck - offset);
-            Array.Copy(Deck, 0, cut_Deck, NumberOfCardsInDeck - offset, offset);
+            Cut(offset);
+        }
+        public void Cut(int offset)
+        {
+            idx = 0;
 
-            Deck = cut_Deck;
+            int[] cut_Deck = new int[NumberOfCardsInDeck];
+            Array.Copy(deck, offset, cut_Deck, 0, NumberOfCardsInDeck - offset);
+            Array.Copy(deck, 0, cut_Deck, NumberOfCardsInDeck - offset, offset);
+
+            deck = cut_Deck;
         }
     }
 }
