@@ -20,20 +20,23 @@ namespace CardManager.Controllers
         public int Pop(string id)
         {
             int res = -1;
-            try
+            if (id != null)
             {
-                Card card = CardRepository.GetCard(id);
-                if (card != null && card.idx >= 0 && card.idx < Card.NumberOfCardsInDeck)
+                try
                 {
-                    res = card.deck[card.idx];
-                    card.idx++;
-                    CardRepository.SaveCardAndUpdateLastUse(id, card);
+                    Card card = CardRepository.GetCard(id);
+                    if (card != null && card.idx >= 0 && card.idx < Card.NumberOfCardsInDeck)
+                    {
+                        res = card.deck[card.idx];
+                        card.idx++;
+                        CardRepository.SaveCardAndUpdateLastUse(id, card);
+                    }
                 }
-            }
-            catch(Exception e)
-            {
-                Console.WriteLine("error at Poping card");
-                Console.WriteLine($"error message {e.Message}");
+                catch (Exception e)
+                {
+                    Console.WriteLine("error at Poping card");
+                    Console.WriteLine($"error message {e.Message}");
+                }
             }
             return res;
         }
@@ -43,19 +46,22 @@ namespace CardManager.Controllers
         public Card Shuffle(string id)
         {
             Card card = null;
-            try
+            if (id != null)
             {
-                card = CardRepository.GetCardAndUpdateLastUse(id);
-                if (card != null)
+                try
                 {
-                    card.Shuffle();
-                    CardRepository.SaveCardAndUpdateLastUse(id, card);
+                    card = CardRepository.GetCardAndUpdateLastUse(id);
+                    if (card != null)
+                    {
+                        card.Shuffle();
+                        CardRepository.SaveCardAndUpdateLastUse(id, card);
+                    }
                 }
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine("error at Poping card");
-                Console.WriteLine($"error message {e.Message}");
+                catch (Exception e)
+                {
+                    Console.WriteLine("error at Shuffling deck");
+                    Console.WriteLine($"error message {e.Message}");
+                }
             }
             return card;
         }
@@ -64,19 +70,22 @@ namespace CardManager.Controllers
         public Card Cut(string id)
         {
             Card card = null;
-            try
+            if (id != null)
             {
-                card = CardRepository.GetCardAndUpdateLastUse(id);
-                if (card != null)
+                try
                 {
-                    card.Cut();
-                    CardRepository.SaveCardAndUpdateLastUse(id, card);
+                    card = CardRepository.GetCardAndUpdateLastUse(id);
+                    if (card != null)
+                    {
+                        card.Cut();
+                        CardRepository.SaveCardAndUpdateLastUse(id, card);
+                    }
                 }
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine("error at Poping card");
-                Console.WriteLine($"error message {e.Message}");
+                catch (Exception e)
+                {
+                    Console.WriteLine("error at Cutting deck");
+                    Console.WriteLine($"error message {e.Message}");
+                }
             }
             return card;
         }
@@ -85,19 +94,22 @@ namespace CardManager.Controllers
         public Card Cut(string id, int offset)
         {
             Card card = null;
-            try
+            if (id != null && offset >= 0 && offset < Card.NumberOfCardsInDeck)
             {
-                card = CardRepository.GetCardAndUpdateLastUse(id);
-                if (card != null)
+                try
                 {
-                    card.Cut(offset);
-                    CardRepository.SaveCardAndUpdateLastUse(id, card);
+                    card = CardRepository.GetCardAndUpdateLastUse(id);
+                    if (card != null)
+                    {
+                        card.Cut(offset);
+                        CardRepository.SaveCardAndUpdateLastUse(id, card);
+                    }
                 }
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine("error at Poping card");
-                Console.WriteLine($"error message {e.Message}");
+                catch (Exception e)
+                {
+                    Console.WriteLine("error at Cutting deck");
+                    Console.WriteLine($"error message {e.Message}");
+                }
             }
             return card;
         }
@@ -106,17 +118,20 @@ namespace CardManager.Controllers
         public Card Create(string id)
         {
             Card card = new Card(id);
-            try
+            if (id != null)
             {
-                if (card != null)
+                try
                 {
-                    CardRepository.SaveCardAndUpdateLastUse(id, card);
+                    if (card != null)
+                    {
+                        CardRepository.SaveCardAndUpdateLastUse(id, card);
+                    }
                 }
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine("error at Poping card");
-                Console.WriteLine($"error message {e.Message}");
+                catch (Exception e)
+                {
+                    Console.WriteLine("error at Creating deck");
+                    Console.WriteLine($"error message {e.Message}");
+                }
             }
             return card;
         }
@@ -131,7 +146,7 @@ namespace CardManager.Controllers
             }
             catch (Exception e)
             {
-                Console.WriteLine("error at Poping card");
+                Console.WriteLine("error at Creating deck");
                 Console.WriteLine($"error message {e.Message}");
             }
             return card;
@@ -142,14 +157,17 @@ namespace CardManager.Controllers
         public Card ReturnDeck(string id)
         {
             Card card = null;
-            try
+            if (id != null)
             {
-                card = CardRepository.GetCardAndUpdateLastUse(id);
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine("error at Poping card");
-                Console.WriteLine($"error message {e.Message}");
+                try
+                {
+                    card = CardRepository.GetCardAndUpdateLastUse(id);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine("error at Returning deck");
+                    Console.WriteLine($"error message {e.Message}");
+                }
             }
             return card;
         }

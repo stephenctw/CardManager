@@ -8,16 +8,19 @@ using StackExchange.Redis;
 using Newtonsoft.Json;
 using System.Text;
 
+//reference here https://docs.microsoft.com/en-us/azure/redis-cache/cache-web-app-howto
+
 namespace CardManager.Service
 {
-    public class CardRepository
+    public static class CardRepository
     {
         private static readonly int ExpirationTime = Convert.ToInt32(ConfigurationManager.AppSettings["ExpirationTime"]);
+        private static readonly string CacheConnection = ConfigurationManager.AppSettings["CacheConnection"].ToString();
 
         // Redis Connection string info
         private static Lazy<ConnectionMultiplexer> lazyConnection = new Lazy<ConnectionMultiplexer>(() =>
         {
-            string cacheConnection = ConfigurationManager.AppSettings["CacheConnection"].ToString();
+            string cacheConnection = CacheConnection;
             return ConnectionMultiplexer.Connect(cacheConnection);
         });
 
