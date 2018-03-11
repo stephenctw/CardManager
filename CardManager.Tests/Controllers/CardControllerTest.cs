@@ -18,7 +18,7 @@ namespace CardManager.Tests.Controllers
         public void InitAppSettings()
         {
             ConfigurationManager.AppSettings["ExpirationTime"] = 30.ToString();
-            ConfigurationManager.AppSettings["CacheConnection"] = "StephenRedis.redis.cache.windows.net:6380,password=ktpj/aHoFFRBVrQeKnfya0UGbuCMpXbiwwiemdYGfN0=,ssl=True,abortConnect=False";
+            ConfigurationManager.AppSettings["CacheConnection"] = "********";
         }
         [TestMethod]
         public void CreateNewCardTest()
