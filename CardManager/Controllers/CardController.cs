@@ -11,6 +11,7 @@ namespace CardManager.Controllers
 {
     public class CardController : ApiController
     {
+        private static NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
         public String Get()
         {
             return "Welcome using Card Manager";
@@ -31,12 +32,28 @@ namespace CardManager.Controllers
                         card.idx++;
                         CardRepository.SaveCardAndUpdateLastUse(id, card);
                     }
+                    else
+                    {
+                        if (card == null)
+                        {
+                            logger.Debug("Card is null");
+                        }
+                        else
+                        {
+                            logger.Debug($"Card index: {card.idx}");
+                        }
+                    }
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine("error at Poping card");
-                    Console.WriteLine($"error message {e.Message}");
+                    logger.Error("Error at Poping card");
+                    logger.Debug($"Error message {e.Message}");
                 }
+            }
+            else
+            {
+                logger.Error("Invalid parameters.");
+                logger.Debug($"Id: {id}");
             }
             return res;
         }
@@ -59,9 +76,14 @@ namespace CardManager.Controllers
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine("error at Shuffling deck");
-                    Console.WriteLine($"error message {e.Message}");
+                    logger.Error("Error at Shuffling deck");
+                    logger.Debug($"Error message {e.Message}");
                 }
+            }
+            else
+            {
+                logger.Error("Invalid parameters.");
+                logger.Debug($"Id: {id}");
             }
             return card;
         }
@@ -83,9 +105,14 @@ namespace CardManager.Controllers
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine("error at Cutting deck");
-                    Console.WriteLine($"error message {e.Message}");
+                    logger.Error("Error at Cutting deck");
+                    logger.Debug($"Error message {e.Message}");
                 }
+            }
+            else
+            {
+                logger.Error("Invalid parameters.");
+                logger.Debug($"Id: {id}");
             }
             return card;
         }
@@ -107,9 +134,14 @@ namespace CardManager.Controllers
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine("error at Cutting deck");
-                    Console.WriteLine($"error message {e.Message}");
+                    logger.Error("Error at Cutting deck");
+                    logger.Debug($"Error message {e.Message}");
                 }
+            }
+            else
+            {
+                logger.Error("Invalid parameters.");
+                logger.Debug($"Id: {id}, Offset: {offset}");
             }
             return card;
         }
@@ -129,9 +161,14 @@ namespace CardManager.Controllers
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine("error at Creating deck");
-                    Console.WriteLine($"error message {e.Message}");
+                    logger.Error("Error at Creating deck");
+                    logger.Debug($"Error message {e.Message}");
                 }
+            }
+            else
+            {
+                logger.Error("Invalid parameters.");
+                logger.Debug($"Id: {id}");
             }
             return card;
         }
@@ -146,8 +183,8 @@ namespace CardManager.Controllers
             }
             catch (Exception e)
             {
-                Console.WriteLine("error at Creating deck");
-                Console.WriteLine($"error message {e.Message}");
+                logger.Error("Error at Creating deck");
+                logger.Debug($"Error message {e.Message}");
             }
             return card;
         }
@@ -165,9 +202,14 @@ namespace CardManager.Controllers
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine("error at Returning deck");
-                    Console.WriteLine($"error message {e.Message}");
+                    logger.Error("Error at Returning deck");
+                    logger.Debug($"Error message {e.Message}");
                 }
+            }
+            else
+            {
+                logger.Error("Invalid parameters.");
+                logger.Debug($"Id: {id}");
             }
             return card;
         }

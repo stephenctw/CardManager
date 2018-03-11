@@ -14,6 +14,7 @@ namespace CardManager.Service
 {
     public static class CardRepository
     {
+        private static NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
         private static readonly int ExpirationTime = Convert.ToInt32(ConfigurationManager.AppSettings["ExpirationTime"]);
         private static readonly string CacheConnection = ConfigurationManager.AppSettings["CacheConnection"].ToString();
 
@@ -45,7 +46,8 @@ namespace CardManager.Service
             }
             else
             {
-                Console.WriteLine($"Redis not connected, connectionstring is {ConfigurationManager.AppSettings["CacheConnection"]}");
+                logger.Error("Redis not connected.");
+                logger.Debug($"Connectionstring is {ConfigurationManager.AppSettings["CacheConnection"]}");
             }
             return res;
         }
@@ -84,7 +86,8 @@ namespace CardManager.Service
             }
             else
             {
-                Console.WriteLine($"Redis not connected, connectionstring is {ConfigurationManager.AppSettings["CacheConnection"]}");
+                logger.Error("Redis not connected.");
+                logger.Debug($"Connectionstring is {ConfigurationManager.AppSettings["CacheConnection"]}");
             }
         }
     }
