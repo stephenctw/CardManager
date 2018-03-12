@@ -22,35 +22,6 @@ namespace CardManager
                 defaults: new { action = "Get" },
                 constraints: new { httpMethod = new HttpMethodConstraint(HttpMethod.Get) }
             );
-            /*
-            config.Routes.MapHttpRoute(
-                name: "DefaultApi",
-                routeTemplate: "api/{controller}/{id}",
-                defaults: new { id = RouteParameter.Optional }
-            );
-            config.Routes.MapHttpRoute(
-                name: "DefaultApiWithActionAndId",
-                routeTemplate: "api/{controller}/{id}/{action}",
-                defaults: new {  },
-                constraints: new { action = "" }
-            );
-            config.Routes.MapHttpRoute(
-                name: "DefaultApiWithId",
-                routeTemplate: "api/{controller}/{id}",
-                defaults: new { action = "ReturnDeck", id = RouteParameter.Optional },
-                constraints: new { id = @"\d+" }
-            );
-            config.Routes.MapHttpRoute(
-                name: "DefaultApiWithAction",
-                routeTemplate: "api/{controller}/{action}"
-            );
-            config.Routes.MapHttpRoute(
-                name: "DefaultApiPost",
-                routeTemplate: "api/{controller}",
-                defaults: new { action = "Post" },
-                constraints: new { httpMethod = new HttpMethodConstraint(HttpMethod.Post) }
-            );
-            */
         }
     }
 }

@@ -16,6 +16,11 @@ namespace CardManager.Controllers
         {
             return "Welcome using Card Manager";
         }
+        /// <summary>
+        /// Pop one card off a deck with user given id
+        /// </summary>
+        /// <param name="id">a valid deck id</param>
+        /// <returns>card number between 0-51 if successful, -1 if fail</returns>
         [HttpGet]
         [Route("api/card/{id}/pop")]
         public int Pop(string id)
@@ -58,6 +63,11 @@ namespace CardManager.Controllers
             return res;
         }
 
+        /// <summary>
+        /// Shuffle a deck with user given id
+        /// </summary>
+        /// <param name="id">a valid deck id</param>
+        /// <returns>Card object if successful, null if fail</returns>
         [HttpGet]
         [Route("api/card/{id}/shuffle")]
         public Card Shuffle(string id)
@@ -87,6 +97,11 @@ namespace CardManager.Controllers
             }
             return card;
         }
+        /// <summary>
+        /// Cut a deck with user given id
+        /// </summary>
+        /// <param name="id">a valid deck id</param>
+        /// <returns>Card object if successful, null if fail</returns>
         [HttpGet]
         [Route("api/card/{id}/cut")]
         public Card Cut(string id)
@@ -116,6 +131,12 @@ namespace CardManager.Controllers
             }
             return card;
         }
+        /// <summary>
+        /// Cut a deck with user given id and user given offset
+        /// </summary>
+        /// <param name="id">a valid deck id</param>
+        /// <param name="id">a valid offset between 0-51</param>
+        /// <returns>Card object if successful, null if fail</returns>
         [HttpGet]
         [Route("api/card/{id}/cut")]
         public Card Cut(string id, int offset)
@@ -145,6 +166,11 @@ namespace CardManager.Controllers
             }
             return card;
         }
+        /// <summary>
+        /// Create a deck with user given id
+        /// </summary>
+        /// <param name="id">a valid deck id</param>
+        /// <returns>Card object if successful, null if fail</returns>
         [HttpGet]
         [Route("api/card/{id}/create")]
         public Card Create(string id)
@@ -172,6 +198,10 @@ namespace CardManager.Controllers
             }
             return card;
         }
+        /// <summary>
+        /// Create a deck
+        /// </summary>
+        /// <returns>Card object if successful, null if fail</returns>
         [HttpGet]
         [Route("api/card/create")]
         public Card Create()
@@ -188,6 +218,11 @@ namespace CardManager.Controllers
             }
             return card;
         }
+        /// <summary>
+        /// Return a deck with user given id
+        /// </summary>
+        /// <param name="id">a valid deck id</param>
+        /// <returns>Card object if successful, null if fail</returns>
         [HttpGet]
         [Route("api/card/{id}")]
         [Route("api/card/{id}/returndeck")]

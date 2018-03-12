@@ -32,7 +32,12 @@ namespace CardManager.Service
                 return lazyConnection.Value;
             }
         }
-        public static Card GetCard(string id)//get card from cache by id
+        /// <summary>
+        /// Try to get a deck from cache with user given id
+        /// </summary>
+        /// <param name="id">a valid deck id</param>
+        /// <returns>Card object if successful, null if fail</returns>
+        public static Card GetCard(string id)
         {
             Card res = null;
             if (Connection.IsConnected)
@@ -51,7 +56,11 @@ namespace CardManager.Service
             }
             return res;
         }
-        public static Card GetCardAndUpdateLastUse()//generate new card and id
+        /// <summary>
+        /// Try to generate a new deck and save it to cache, also refresh its expiration time
+        /// </summary>
+        /// <returns>Card object if successful, null if fail</returns>
+        public static Card GetCardAndUpdateLastUse()
         {
             Card card = null;
             string id = Guid.NewGuid().ToString();
@@ -65,7 +74,12 @@ namespace CardManager.Service
 
             return card;
         }
-        public static Card GetCardAndUpdateLastUse(string id)//get card from cache by id and update last use
+        /// <summary>
+        /// Try to get a deck from cache with user given id, also refresh its expiration time
+        /// </summary>
+        /// <param name="id">a valid deck id</param>
+        /// <returns>Card object if successful, null if fail</returns>
+        public static Card GetCardAndUpdateLastUse(string id)
         {
             Card res = GetCard(id);
             if (res != null)
@@ -75,7 +89,12 @@ namespace CardManager.Service
 
             return res;
         }
-        public static void SaveCardAndUpdateLastUse(string id, Card card)//save card to cache with id and update access time
+        /// <summary>
+        /// Try to save a deck to cache with user given id, also refresh its expiration time
+        /// </summary>
+        /// <param name="id">a valid deck id</param>
+        /// <returns></returns>
+        public static void SaveCardAndUpdateLastUse(string id, Card card)
         {
             if (Connection.IsConnected)
             {
